@@ -17,11 +17,14 @@ class Laptop(scrapy.Item):
     laptop_type = scrapy.Field()
     system = scrapy.Field()
     
+# define a spider to fetch the data
 class LaptopSpider(scrapy.Spider):
     name = 'laptops'
     allowed_domains = ['https://www.euro.com.pl/']
+
+    # use laptops_links.csv from the previous step
     try:
-        with open("laptops.csv", "rt") as f:
+        with open("laptops_links.csv", "rt") as f:
             start_urls = [url.strip('""\n') for url in f.readlines()][1:]
     except:
         start_urls = []

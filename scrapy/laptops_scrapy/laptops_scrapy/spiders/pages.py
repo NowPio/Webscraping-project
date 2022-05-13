@@ -3,9 +3,11 @@ import re
 
 # scraping consecutive pages with links to laptops 
 
+# define field for the links
 class Link(scrapy.Item):
     link = scrapy.Field()
 
+# define name, domains, urls and the programme to scrape the links
 class PagesSpider(scrapy.Spider):
     name = 'pages'
     allowed_domains = ['https://www.euro.com.pl/']

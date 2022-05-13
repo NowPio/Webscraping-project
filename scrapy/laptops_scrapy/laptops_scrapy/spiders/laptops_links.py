@@ -2,9 +2,11 @@ import scrapy
 
 # scrape links to laptops using links from pages.csv
 
+# crate a field for the links
 class Link(scrapy.Item):
     link = scrapy.Field()
 
+# create a spider to scrape the links
 class LaptopsSpider(scrapy.Spider):
     name = 'laptops_links'
     allowed_domains = ['https://www.euro.com.pl/']
