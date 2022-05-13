@@ -82,13 +82,7 @@ def get_data(bs):
     try:
         laptop_type = table.find('a',{'title':'Typy laptopów'}).parent.find_next_sibling().text.strip()
     except:
-        laptop_type = ""    
-
-    # get case
-    try:
-        case = table.find('a',{'title':'Materiał obudowy - laptopy'}).parent.find_next_sibling().text.strip()
-    except:
-        case = ""  
+        laptop_type = ""     
 
     # get system
     try:
@@ -100,7 +94,7 @@ def get_data(bs):
             'diagonal':diagonal,'battery':battery, 
             'processor':processor,'RAM':RAM,'ssd_memmory':ssd_memmory,
             'Graphic_card':Graphic_card, 'laptop_type':laptop_type,
-            'case':case, 'system':system}
+            'system':system}
 
     return laptop
 
@@ -159,7 +153,7 @@ if pages100 == True:
 data = pd.DataFrame({'brand':[], 'price':[], 'screen':[], 'diagonal':[],
                     'battery':[], 'processor':[], 'RAM':[], 
                     'ssd_memmory':[], 'Graphic_card':[], 'laptop_type':[],
-                    'case':[], 'system':[]})
+                    'system':[]})
 
 # variable to show progress of scraping in loop below
 page_number = 1
