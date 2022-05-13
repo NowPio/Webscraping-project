@@ -1,4 +1,4 @@
-# Scrapy settings for euro project
+# Scrapy settings for laptops_scrapy project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,14 +7,14 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'euro'
+BOT_NAME = 'laptops_scrapy'
 
-SPIDER_MODULES = ['euro.spiders']
-NEWSPIDER_MODULE = 'euro.spiders'
+SPIDER_MODULES = ['laptops_scrapy.spiders']
+NEWSPIDER_MODULE = 'laptops_scrapy.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'euro (+http://www.yourdomain.com)'
+#USER_AGENT = 'laptops_scrapy (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -45,13 +45,13 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'euro.middlewares.EuroSpiderMiddleware': 543,
+#    'laptops_scrapy.middlewares.LaptopsScrapySpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'euro.middlewares.EuroDownloaderMiddleware': 543,
+#    'laptops_scrapy.middlewares.LaptopsScrapyDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -63,7 +63,7 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    'euro.pipelines.EuroPipeline': 300,
+#    'laptops_scrapy.pipelines.LaptopsScrapyPipeline': 300,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
