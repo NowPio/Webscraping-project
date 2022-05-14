@@ -31,7 +31,7 @@ def get_data(driver):
         brand = ""
 
     # get price
-    price_xpath = '/div[@class="suite-main-product"]//div[@class="product-price"]/child::div'
+    price_xpath = '//div[@class="suite-main-product"]//div[@class="product-price"]/child::div'
     try:
         price = driver.find_element_by_xpath(price_xpath).text
         price = price.strip()
@@ -39,7 +39,7 @@ def get_data(driver):
         price = ""
 
     # get screen diagonal
-    screen_xpath = '//a[@title="Przekątna matrycy - laptopy"]/parent::span/following-sibling::span'
+    screen_xpath = '//a[@title="Przekątna matrycy - laptopy"]/parent::td/following-sibling::td'
     try:
         screen = driver.find_element_by_xpath(screen_xpath).text.strip()
         # spliting the data into 2 variables
@@ -51,7 +51,7 @@ def get_data(driver):
         screen = ""
 
     # get battery
-    battery_xpath = '//a[@title="Pojemność baterii - laptopy"]/parent::td/following-sibling::td/text()'
+    battery_xpath = '//a[@title="Pojemność baterii - laptopy"]/parent::td/following-sibling::td'
     try:
         battery = driver.find_element_by_xpath(battery_xpath).text
     except:
@@ -102,7 +102,7 @@ def get_data(driver):
     laptop = {'brand':brand, 'price':price, 'screen':screen, 
             'diagonal':diagonal,'battery':battery, 
             'processor':processor,'RAM':RAM,'ssd_memmory':ssd_memmory,
-            'Graphic_card':Graphic_card, 'laptop_type':laptop_type,
+            'graphic_card':Graphic_card, 'laptop_type':laptop_type,
             'system':system}
 
     return laptop
@@ -129,7 +129,7 @@ last_page = last_page.text.strip()
 time.sleep(0.3)
 
 
-# collecting links from first site
+# collecting links to laptops from the first site
 links_list = []
 xpath_links = '//div[@id="products"]//div[@class="product-row"]//a[@class="js-save-keyword"]'
 
@@ -140,18 +140,18 @@ time.sleep(2)
 # Scraping links
 
 # creating list with links to pages
-page_with_offerts_links = []
+page_with_offers_links = []
 for i in range(2,int(last_page)+1):
     link = domain + '/laptopy-i-netbooki,strona-' + str(i) + '.bhtml'
-    page_with_offerts_links.append(link)
+    page_with_offers_links.append(link)
 
 # a loop collecting links to offers
-for url in page_with_offerts_links:
+for url in page_with_offers_links:
 
     # loading the page
     driver.get(url)
     time.sleep(5)
-    # taking offerts links
+    # taking offers links
     scrap_links(driver,xpath_links,links_list)
     time.sleep(0.3)
 
@@ -162,7 +162,7 @@ for url in page_with_offerts_links:
 
 
 #trash collecting from fist step
-del page_with_offerts_links, cookies_accept, last_page, xpath_links
+del page_with_offers_links, cookies_accept, last_page, xpath_links
 
 ###########################################################
 # Scraping data from offers
@@ -188,6 +188,12 @@ for url in links_list:
 
     # loading the page
     driver.get(url)
+    time.sleep(5)
+
+    # clicking on 'expand technical details' button
+    expand = driver.find_element(By.XPATH, '//*[@id="expand-specification"]')
+    expand.click()
+
     time.sleep(5)
 
     #scraping data
