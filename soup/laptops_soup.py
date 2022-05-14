@@ -15,7 +15,7 @@ pages100 = True
 
 
 def scrap_links(bs,link_list):
-    # function collects links to offers and adds them to the linking list
+    # function collects links to offers and adds them to the links' list
     # bs - page soup, link_list - list with links
     
     # Collecting all tags with links on page
