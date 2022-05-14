@@ -5,6 +5,9 @@ import pandas as pd
 import time
 
 domain = 'https://www.euro.com.pl'
+
+# Variable that reduces the number of scrapped pages to 100
+# True - only 100 pages, False - all pages
 pages100 = True
 
 ####################################################
@@ -14,8 +17,11 @@ pages100 = True
 def scrap_links(bs,link_list):
     # function collects links to offers and adds them to the linking list
     # bs - page soup, link_list - list with links
+    
+    # Collecting all tags with links on page
     start_page = bs.find_all('div',{'class':'product-buttons'})
     for i in start_page:
+        # adding created links to the link_list
         link_list.append(domain+i.a['href'])
 
 def get_data(bs):
@@ -89,7 +95,8 @@ def get_data(bs):
         system = table.find('td', text=re.compile('\s*System operacyjny.*')).find_next_sibling().text.strip()
     except:
         system = ""
-
+    
+    # creating dictionary with data
     laptop = {'brand':brand, 'price':price, 'screen':screen, 
             'diagonal':diagonal,'battery':battery, 
             'processor':processor,'RAM':RAM,'ssd_memmory':ssd_memmory,
@@ -99,24 +106,27 @@ def get_data(bs):
     return laptop
 
 #######################################################
-# scraping first page
+# Scraping first page
+# extra data are scraped from this page, which is way we don't include it in loop
 
 url = 'https://www.euro.com.pl/laptopy-i-netbooki.bhtml' 
 html = request.urlopen(url)
 bs = BS(html.read(), 'html.parser')
 
-# number of pages linking to offers
+# Scrapping number of pages linking to offers
+# last_page variable will be used to create all available links
 last_page = bs.find('div',{'class':'paging-numbers'}).find_all('a')[-1].text
 last_page = last_page.strip()
 
-# collecting links from first site
+# collecting links from first site using scrap_links function
 links = []
 scrap_links(bs,links)
 
 ###########################################################
-# Scraping links
+# Scraping links - other pages
 
-# creating list with links to pages
+# creating list with links to pages using last_page variable. 
+#  This variable represents the number of the last existing page
 page_with_offerts_links = []
 for i in range(2,int(last_page)+1):
     link = domain + '/laptopy-i-netbooki,strona-' + str(i) + '.bhtml'
@@ -129,11 +139,11 @@ for url in page_with_offerts_links:
     html = request.urlopen(url)
     bs = BS(html.read(), 'html.parser')
 
-    # taking offerts links
+    # taking offerts links by scrapy_links function
     scrap_links(bs,links)
     time.sleep(1)
 
-    # reducing number of pages visited in this step
+    # reducing number of pages visited in this step, when variable pages100 is used
     if pages100 == True:
         if len(links) >= 100:
             break
@@ -145,6 +155,10 @@ del bs,html,page_with_offerts_links, link, last_page
 # Scraping data from offers
 
 # reducing number of links scraped in first step
+
+# the previous if statement only truncates a page count.
+# at the moment of breaking the loop, the number of pages is approximately 112. 
+# therefore, the remaining 12 links must be removed using the code below
 if pages100 == True:
     if len(links) >= 100:
         links = links[0:100]
@@ -161,10 +175,11 @@ page_number = 1
 # a loop collecting data from offers 
 for url in links:
 
+    # request
     html = request.urlopen(url)
     bs = BS(html.read(), 'html.parser')
 
-    #scraping data
+    #scraping data using get_data function
     laptop_data = get_data(bs)
 
     #collecting the data
