@@ -6,7 +6,7 @@ import time
 
 domain = 'https://www.euro.com.pl'
 
-# Variable that reduces the number of scrapped pages to 100
+# Variable that reduces the number of scraped pages to 100
 # True - only 100 pages, False - all pages
 pages100 = True
 
