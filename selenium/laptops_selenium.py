@@ -5,8 +5,12 @@ import time
 import pandas as pd
 
 # Init:
-PATH = "C:\Program Files (x86)\WebDriver\chromedriver.exe"
-driver = webdriver.Chrome(PATH)
+gecko_path = '/opt/homebrew/bin/geckodriver'
+ser = Service(gecko_path)
+options = webdriver.firefox.options.Options()
+options.headless = False
+driver = webdriver.Firefox(options = options, service=ser)
+
 
 domain = 'https://www.euro.com.pl'
 
