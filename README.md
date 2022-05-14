@@ -1,4 +1,4 @@
-# Webscrapping-project
+# Webscraping-project
 
 Below you can find instructions on how to run the scrapers
 
