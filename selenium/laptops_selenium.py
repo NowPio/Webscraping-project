@@ -9,20 +9,29 @@ PATH = "C:\Program Files (x86)\WebDriver\chromedriver.exe"
 driver = webdriver.Chrome(PATH)
 
 domain = 'https://www.euro.com.pl'
+
+# Variable that reduces the number of scrapped pages to 100
+# True - only 100 pages, False - all pages
 pages100 = True
 
 ####################################################
 # Functions used in project
 
 def scrap_links(driver,xpath_links,links_list):
-    # function collects links to offers and adds them to the linking list
+    # function collects links to offers and adds them to the links' list
     # driver - chromedriver, links_list - list with links, 
     # xpath_links - xpath for finding elements
+    
+    # collecting all tags with links on page
     links_taken = driver.find_elements_by_xpath(xpath_links)
     for link in links_taken:
+        # adding created links to the link_list
         links_list.append(link.get_attribute("href"))
 
 def get_data(driver):
+    # function collects data from webpage and return it using dictionary 
+    # bs- page soup
+    
     # get brand
     brand_xpath = '//a[@class="product-brand"]'
     try:
@@ -99,6 +108,7 @@ def get_data(driver):
     except:
         system = ""
 
+    # creating dictionary with data
     laptop = {'brand':brand, 'price':price, 'screen':screen, 
             'diagonal':diagonal,'battery':battery, 
             'processor':processor,'RAM':RAM,'ssd_memmory':ssd_memmory,
@@ -108,7 +118,8 @@ def get_data(driver):
     return laptop
 
 #######################################################
-# turning on the browser
+# Turning on the browser
+
 url = 'https://www.euro.com.pl/laptopy-i-netbooki.bhtml' 
 driver.get(url)
 
@@ -116,21 +127,25 @@ driver.get(url)
 time.sleep(15)
 
 #######################################################
-# scraping first page
+# Scraping first page
+# extra data are scraped from this page, which is way we don't include it in loop
 
-# accepting cookies
+# accepting cookies by clicking on 'accept' button
 cookies_accept = driver.find_element_by_id('onetrust-accept-btn-handler')
 cookies_accept.click()
 time.sleep(5)
 
-# number of pages linking to offers
+# Scrapping number of pages linking to offers
+# last_page variable will be used to create all available links
 last_page = driver.find_element(By.XPATH,'//div[@class="paging "]//span[@class="paging-dots"]/following-sibling::a')
 last_page = last_page.text.strip()
 time.sleep(0.3)
 
 
-# collecting links to laptops from the first site
+# collecting links to laptops from the first site using scrap_links function
 links_list = []
+
+#xpath for tag with links
 xpath_links = '//div[@id="products"]//div[@class="product-row"]//a[@class="js-save-keyword"]'
 
 scrap_links(driver,xpath_links,links_list)
@@ -139,7 +154,8 @@ time.sleep(2)
 ###########################################################
 # Scraping links
 
-# creating list with links to pages
+# creating list with links to pages using last_page variable. 
+# This variable represents the number of the last existing page
 page_with_offers_links = []
 for i in range(2,int(last_page)+1):
     link = domain + '/laptopy-i-netbooki,strona-' + str(i) + '.bhtml'
@@ -151,23 +167,30 @@ for url in page_with_offers_links:
     # loading the page
     driver.get(url)
     time.sleep(5)
-    # taking offers links
+    
+    # taking offers links using scrap_links function
     scrap_links(driver,xpath_links,links_list)
     time.sleep(0.3)
 
-    # reducing number of pages visited in this step
+    # reducing number of pages visited in this step, when variable pages100 is used
     if pages100 == True:
         if len(links_list) >= 100:
             break
 
 
-#trash collecting from fist step
+# trash collecting from fist step
 del page_with_offers_links, cookies_accept, last_page, xpath_links
 
 ###########################################################
 # Scraping data from offers
 
+
 # reducing number of links scraped in first step
+
+# the previous if statement only truncates a page count.
+# at the moment of breaking the loop, the number of pages is approximately 112. 
+# therefore, the remaining 12 links must be removed using the code below
+
 if pages100 == True:
     if len(links_list) >= 100:
         links_list = links_list[0:100]
@@ -196,7 +219,7 @@ for url in links_list:
 
     time.sleep(5)
 
-    #scraping data
+    #scraping data with get_data function
     laptop_data = get_data(driver)
 
     #collecting the data
